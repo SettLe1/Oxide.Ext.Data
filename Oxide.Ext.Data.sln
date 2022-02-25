@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Data", "Oxide.Ext.Data\Oxide.Ext.Data.csproj", "{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

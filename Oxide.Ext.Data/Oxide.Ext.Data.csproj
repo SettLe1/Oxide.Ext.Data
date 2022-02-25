@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{34FDEBA8-14A7-40F2-A96A-FA53DDE7F8E0}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Oxide.Ext.Data</RootNamespace>
+        <AssemblyName>Oxide.Ext.Data</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>6</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Network, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Facepunch.Network.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Facepunch.UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Build" />
+        <Reference Include="Microsoft.Build.Conversion.v4.0" />
+        <Reference Include="Microsoft.Build.Engine" />
+        <Reference Include="Microsoft.Build.Framework" />
+        <Reference Include="Microsoft.Build.Tasks.v4.0" />
+        <Reference Include="Microsoft.Build.Utilities.v4.0" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="Microsoft.JScript" />
+        <Reference Include="Microsoft.VisualBasic" />
+        <Reference Include="Microsoft.VisualBasic.Compatibility" />
+        <Reference Include="Microsoft.VisualBasic.Compatibility.Data" />
+        <Reference Include="Microsoft.VisualC" />
+        <Reference Include="Microsoft.VisualC.STLCLR" />
+        <Reference Include="Oxide.Core, Version=2.0.3999.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Oxide.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.CSharp, Version=2.0.4046.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Oxide.CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.References, Version=2.0.3779.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Oxide.References.dll</HintPath>
+        </Reference>
+        <Reference Include="ReachFramework" />
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.Linq" />
+        <Reference Include="System.Net" />
+        <Reference Include="System.Web" />
+        <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="BaseData.cs" />
+        <Compile Include="DataConfig.cs" />
+        <Compile Include="DataExtension.cs" />
+        <Compile Include="DataManager.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
