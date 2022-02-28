@@ -11,14 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9344c9f-948b-4676-9d26-0eab77c9370c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataAutoUpdater.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataPluginLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/Oxide.Ext.Data.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Oxide.Ext.Data.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,8 +44,8 @@
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/AutoUpdate.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataPluginLoader.cs" />
-        <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataAutoUpdater.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" />
       </list>
     </option>
   </component>
@@ -103,7 +96,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="v1.0.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="v1.0.0" />
+    <MESSAGE value="v1.0.4" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.0.4" />
   </component>
   <component name="WindowStateProjectService">
     <state x="208" y="382" width="888" height="548" key="#Notifications" timestamp="1645982394667">
