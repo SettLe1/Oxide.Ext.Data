@@ -9,6 +9,7 @@ namespace Oxide.Ext.Data
       Warning,
       Info
    }
+   
    /// <summary>
    /// This class allows you to manage data from any plugins that are written using this library.
    /// </summary>
@@ -26,7 +27,7 @@ namespace Oxide.Ext.Data
          SuccessMsgSaved = " data saved for ",
          SuccessMsgCreated = " data created for ";
       
-      internal static bool debug, isUnloading, checkVersion;
+      internal static bool debug, stopped, checkVersion;
 
       private static Hash<ulong, Hash<string, BaseData>> _playersData = new Hash<ulong, Hash<string, BaseData>>();
       private static Hash<string, Hash<string, BaseData>> _pluginsData = new Hash<string, Hash<string, BaseData>>();
@@ -67,7 +68,7 @@ namespace Oxide.Ext.Data
             if (playerData.ContainsKey(pluginName))
             {
                if (debug)
-                  SendLog(LogType.Error, string.Format("[TrySetPlayerData<{0}>] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), ErrorMsgAlreadyLoaded, playerId, pluginName));
+                  SendLog(LogType.Error, string.Format("[TrySetPlayerData({0})] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), ErrorMsgAlreadyLoaded, playerId, pluginName));
                return false;
             }
 
@@ -75,7 +76,7 @@ namespace Oxide.Ext.Data
          }
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TrySetPlayerData<{0}>] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), SuccessMsgLoaded, playerId, pluginName));
+            SendLog(LogType.Info, string.Format("[TrySetPlayerData({0})] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), SuccessMsgLoaded, playerId, pluginName));
          return true;
       }
 
@@ -89,7 +90,7 @@ namespace Oxide.Ext.Data
             if (pluginData.ContainsKey(dataName))
             {
                if (debug)
-                  SendLog(LogType.Error, string.Format("[TrySetPluginData<{0}>] Plugin{1}\"{2}\".", data.GetType(), ErrorMsgAlreadyLoaded, pluginName));
+                  SendLog(LogType.Error, string.Format("[TrySetPluginData({0})] Plugin{1}\"{2}\".", data.GetType(), ErrorMsgAlreadyLoaded, pluginName));
                return false;
             }
 
@@ -97,7 +98,7 @@ namespace Oxide.Ext.Data
          }
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TrySetPluginData<{0}>] Plugin{1}\"{2}\".", data.GetType(), SuccessMsgLoaded, pluginName));
+            SendLog(LogType.Info, string.Format("[TrySetPluginData({0})] Plugin{1}\"{2}\".", data.GetType(), SuccessMsgLoaded, pluginName));
          return true;
       }
 
@@ -118,7 +119,7 @@ namespace Oxide.Ext.Data
             return false;
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TryCreatePlayerData<{0}>] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), SuccessMsgCreated, playerId, pluginName));
+            SendLog(LogType.Info, string.Format("[TryCreatePlayerData({0})] Player{1}\"{2}\" from plugin \"{3}\".", data.GetType(), SuccessMsgCreated, playerId, pluginName));
          Interface.Oxide.DataFileSystem.WriteObject($"{PlayersDataFolder}{playerId}/{pluginName}", data);
          return true;
       }
@@ -136,7 +137,7 @@ namespace Oxide.Ext.Data
             return false;
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TryCreatePluginData<{0}>] Plugin{1}\"{2}\" with name \"{3}\".", data.GetType(), SuccessMsgCreated, pluginName, dataName));
+            SendLog(LogType.Info, string.Format("[TryCreatePluginData({0})] Plugin{1}\"{2}\" with name \"{3}\".", data.GetType(), SuccessMsgCreated, pluginName, dataName));
          Interface.Oxide.DataFileSystem.WriteObject($"{PluginsDataFolder}{pluginName}/{dataName}", data);
          return true;
       }
@@ -147,7 +148,7 @@ namespace Oxide.Ext.Data
 
       public static bool TrySaveAllData()
       {
-         if (isUnloading)
+         if (stopped)
             return false;
 
          if (_playersData.Count == 0 && _pluginsData.Count == 0)
@@ -177,7 +178,7 @@ namespace Oxide.Ext.Data
             return false;
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TrySavePlayerData<{0}>] Player{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, playerId, pluginName));
+            SendLog(LogType.Info, string.Format("[TrySavePlayerData({0})] Player{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, playerId, pluginName));
          Interface.Oxide.DataFileSystem.WriteObject($"{PlayersDataFolder}{playerId}/{pluginName}", data);
          return true;
       }
@@ -204,7 +205,7 @@ namespace Oxide.Ext.Data
             return false;
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TrySavePluginData<{0}>] Plugin{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, dataName, pluginName));
+            SendLog(LogType.Info, string.Format("[TrySavePluginData({0})] Plugin{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, dataName, pluginName));
          Interface.Oxide.DataFileSystem.WriteObject($"{PluginsDataFolder}{pluginName}/{dataName}", data);
          return true;
       }
@@ -230,11 +231,11 @@ namespace Oxide.Ext.Data
 
       public static bool TryLoadPlayerData<T>(string pluginName, ulong playerId) where T : BaseData, new()
       {
-         if (isUnloading)
+         if (stopped)
             return false;
 
          var plugin = Interface.Oxide.RootPluginManager.GetPlugin(pluginName);
-         if (plugin == null || !plugin.IsLoaded)
+         if (plugin == null)
          {
             if (debug)
                SendLog(LogType.Error, string.Format("[TryLoadPlayerData] Player{0}\"{1}\", coz the plugin \"{2}\" does not exist or not loaded.", ErrorMsgNotLoaded, playerId, pluginName));
@@ -265,11 +266,11 @@ namespace Oxide.Ext.Data
 
       public static bool TryLoadPluginData<T>(string pluginName, string dataName) where T : BaseData, new()
       {
-         if (isUnloading)
+         if (stopped)
             return false;
 
          var plugin = Interface.Oxide.RootPluginManager.GetPlugin(pluginName);
-         if (plugin == null || !plugin.IsLoaded)
+         if (plugin == null)
          {
             if (debug)
                SendLog(LogType.Error, string.Format("[TryLoadPluginData] Plugin{0}\"{1}\", coz the plugin \"{2}\" does not exist or not loaded.", ErrorMsgNotLoaded, dataName, pluginName));
@@ -304,7 +305,7 @@ namespace Oxide.Ext.Data
 
       public static bool TryUnloadPlayerData<T>(string pluginName, ulong playerId) where T : BaseData
       {
-         if (isUnloading || !IsLoadedPlayerData(pluginName, playerId))
+         if (stopped || !IsLoadedPlayerData(pluginName, playerId))
             return false;
 
          TrySavePlayerData<T>(pluginName, playerId);
@@ -322,7 +323,7 @@ namespace Oxide.Ext.Data
 
       public static bool TryUnloadPlayerData(ulong playerId)
       {
-         if (isUnloading || !IsLoadedPlayerData(playerId))
+         if (stopped || !IsLoadedPlayerData(playerId))
             return false;
 
          TrySavePlayerData(playerId);
@@ -335,7 +336,7 @@ namespace Oxide.Ext.Data
 
       public static bool TryUnloadPluginData<T>(string pluginName, string dataName) where T : BaseData
       {
-         if (isUnloading || !IsLoadedPluginData(pluginName, dataName))
+         if (stopped || !IsLoadedPluginData(pluginName, dataName))
             return false;
 
          TrySavePluginData<T>(pluginName, dataName);
@@ -353,7 +354,7 @@ namespace Oxide.Ext.Data
 
       public static bool TryUnloadPluginData(string pluginName)
       {
-         if (isUnloading || !IsLoadedPluginData(pluginName))
+         if (stopped || !IsLoadedPluginData(pluginName))
             return false;
 
          TrySavePluginData(pluginName);

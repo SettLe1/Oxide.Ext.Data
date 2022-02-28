@@ -65,6 +65,9 @@
         <Reference Include="Oxide.References, Version=2.0.3779.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Oxide.References.dll</HintPath>
         </Reference>
+        <Reference Include="Oxide.Rust, Version=2.0.5297.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\Oxide.Rust.dll</HintPath>
+        </Reference>
         <Reference Include="ReachFramework" />
         <Reference Include="System" />
         <Reference Include="System.ComponentModel.Composition" />
@@ -80,12 +83,17 @@
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>E:\Rust_Server\RustDedicated_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ExtDataAutoUpdater.cs" />
         <Compile Include="BaseData.cs" />
         <Compile Include="DataConfig.cs" />
         <Compile Include="DataExtension.cs" />
         <Compile Include="DataManager.cs" />
+        <Compile Include="ExtDataPluginLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
