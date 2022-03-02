@@ -1,13 +1,23 @@
-﻿using Oxide.Core;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Oxide.Core;
+using Oxide.Ext.Data.Core;
 using Oxide.Plugins;
+using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Ext.Data
 {
-   enum LogType : byte
+   internal enum LogType : byte
    {
       Error,
       Warning,
       Info
+   }
+
+   internal struct SaveData
+   {
+      public string Path;
+      public BaseData Data;
    }
    
    /// <summary>
@@ -27,9 +37,12 @@ namespace Oxide.Ext.Data
          SuccessMsgSaved = " data saved for ",
          SuccessMsgCreated = " data created for ";
       
-      internal static bool debug, stopped, checkVersion;
+      internal static bool debug, stopped, checkVersion, savingAllPlayersData, savingAllPluginsData;
 
+      internal static Queue<SaveData> _savingQueue = new Queue<SaveData>();
+      // keys: playerId, pluginName
       private static Hash<ulong, Hash<string, BaseData>> _playersData = new Hash<ulong, Hash<string, BaseData>>();
+      // keys: pluginName, dataName
       private static Hash<string, Hash<string, BaseData>> _pluginsData = new Hash<string, Hash<string, BaseData>>();
 
       public static void ToggleDebug() => debug = !debug;
@@ -146,82 +159,137 @@ namespace Oxide.Ext.Data
 
       #region Save
 
-      public static bool TrySaveAllData()
+      internal static bool TrySaveAllData()
       {
-         if (stopped)
+         if (stopped || savingAllPluginsData && savingAllPlayersData)
             return false;
 
-         if (_playersData.Count == 0 && _pluginsData.Count == 0)
+         if (!TrySaveAllPlayersData())
          {
-            if (debug)
-               SendLog(LogType.Error, "[TrySaveAllData] Any data does not exist.");
-            return false;
+            TrySaveAllPluginsData();
+            return true;
          }
 
-         foreach (var kvp in _playersData)
+         var timer = new Timer();
+         timer.Once(3f, () =>
          {
-            TrySavePlayerData(kvp.Key);
-         }
-
-         foreach (var kvp in _pluginsData)
-         {
-            TrySavePluginData(kvp.Key);
-         }
-
+            TrySaveAllPluginsData();
+         });
+         
          return true;
       }
 
-      private static bool TrySavePlayerData<T>(string pluginName, ulong playerId) where T : BaseData
+      public static bool TrySavePlayerData<T>(string pluginName, ulong playerId) where T : BaseData
       {
+         if (stopped || savingAllPlayersData)
+            return false;
+
          T data;
          if (!TryGetPlayerData(pluginName, playerId, out data))
             return false;
 
          if (debug)
             SendLog(LogType.Info, string.Format("[TrySavePlayerData({0})] Player{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, playerId, pluginName));
-         Interface.Oxide.DataFileSystem.WriteObject($"{PlayersDataFolder}{playerId}/{pluginName}", data);
+         _savingQueue.Enqueue(new SaveData { Path = $"{PlayersDataFolder}{playerId}/{pluginName}", Data = data });
+         ExtDataCore.Instance.EnableSaving();
          return true;
       }
-
-      private static bool TrySavePlayerData(ulong playerId)
+      
+      public static bool TrySavePlayerData(ulong playerId)
       {
-         if (!IsLoadedPlayerData(playerId))
+         if (stopped || savingAllPlayersData || !IsLoadedPlayerData(playerId))
             return false;
 
          foreach (var kvp in _playersData[playerId])
          {
-            TrySavePlayerData<BaseData>(kvp.Key, playerId);
+            _savingQueue.Enqueue(new SaveData { Path = $"{PlayersDataFolder}{playerId}/{kvp.Key}", Data = kvp.Value });
          }
-
-         if (debug)
-            SendLog(LogType.Info, string.Format("[TrySavePlayerData] All player{0}\"{1}\".", SuccessMsgSaved, playerId));
+         
+         ExtDataCore.Instance.EnableSaving();
          return true;
       }
 
-      private static bool TrySavePluginData<T>(string pluginName, string dataName) where T : BaseData
+      public static bool TrySavePlayersData<T>(string pluginName) where T : BaseData
       {
+         if (stopped || savingAllPlayersData || _playersData.Count == 0)
+            return false;
+
+         foreach (var kvp in _playersData)
+         {
+            T data;
+            if (!TryGetPlayerData(pluginName, kvp.Key, out data))
+               return false;
+            
+            _savingQueue.Enqueue(new SaveData { Path = $"{PlayersDataFolder}{kvp.Key}/{pluginName}", Data = data });
+         }
+         
+         ExtDataCore.Instance.EnableSaving();
+         return true;
+      }
+      
+      public static bool TrySaveAllPlayersData()
+      {
+         if (stopped || savingAllPlayersData || _playersData.Count == 0)
+            return false;
+
+         foreach (var kvp1 in _playersData)
+         {
+            foreach (var kvp2 in kvp1.Value)
+            {
+               _savingQueue.Enqueue(new SaveData { Path = $"{PlayersDataFolder}{kvp1.Key}/{kvp2.Key}", Data = kvp2.Value });
+            }
+         }
+         
+         savingAllPlayersData = true;
+         ExtDataCore.Instance.EnableSaving();
+         return true;
+      }
+
+      public static bool TrySavePluginData<T>(string pluginName, string dataName) where T : BaseData
+      {
+         if (stopped || savingAllPluginsData)
+            return false;
+         
          T data;
          if (!TryGetPluginData(pluginName, dataName, out data))
             return false;
 
          if (debug)
             SendLog(LogType.Info, string.Format("[TrySavePluginData({0})] Plugin{1}\"{2}\" by plugin \"{3}\".", data.GetType(), SuccessMsgSaved, dataName, pluginName));
-         Interface.Oxide.DataFileSystem.WriteObject($"{PluginsDataFolder}{pluginName}/{dataName}", data);
+         _savingQueue.Enqueue(new SaveData { Path = $"{PluginsDataFolder}{pluginName}/{dataName}", Data = data });
+         ExtDataCore.Instance.EnableSaving();
          return true;
       }
-
-      private static bool TrySavePluginData(string pluginName)
+      
+      public static bool TrySavePluginData(string pluginName)
       {
-         if (!IsLoadedPluginData(pluginName))
+         if (stopped || savingAllPluginsData || !IsLoadedPluginData(pluginName))
             return false;
-
+         
          foreach (var kvp in _pluginsData[pluginName])
          {
-            TrySavePluginData<BaseData>(pluginName, kvp.Key);
+            _savingQueue.Enqueue(new SaveData { Path = $"{PluginsDataFolder}{pluginName}/{kvp.Key}", Data = kvp.Value });
+         }
+         
+         ExtDataCore.Instance.EnableSaving();
+         return true;
+      }
+      
+      public static bool TrySaveAllPluginsData()
+      {
+         if (stopped || savingAllPluginsData || _pluginsData.Count == 0)
+            return false;
+
+         foreach (var kvp1 in _pluginsData)
+         {
+            foreach (var kvp2 in kvp1.Value)
+            {
+               _savingQueue.Enqueue(new SaveData { Path = $"{PluginsDataFolder}{kvp1.Key}/{kvp2.Key}", Data = kvp2.Value });
+            }
          }
 
-         if (debug)
-            SendLog(LogType.Info, string.Format("[TrySavePluginData] All plugin{0}\"{1}\".", SuccessMsgSaved, pluginName));
+         savingAllPluginsData = true;
+         ExtDataCore.Instance.EnableSaving();
          return true;
       }
 
@@ -256,6 +324,7 @@ namespace Oxide.Ext.Data
 
          if (checkVersion && data.Version != plugin.Version)
          {
+            SendLog(LogType.Warning, string.Format("{0}\"{1}\", coz the datafile is outdated. Created new datafile.", WarningMsgBackupCreated, path));
             BackupData(path, data);
 
             return TryCreatePlayerData(pluginName, playerId, new T());
@@ -291,6 +360,7 @@ namespace Oxide.Ext.Data
 
          if (checkVersion && data.Version != plugin.Version)
          {
+            SendLog(LogType.Warning, string.Format("{0}\"{1}\", coz the datafile is outdated. Created new datafile.", WarningMsgBackupCreated, path));
             BackupData(path, data);
 
             return TryCreatePluginData(pluginName, dataName, new T());
@@ -320,17 +390,33 @@ namespace Oxide.Ext.Data
             SendLog(LogType.Info, string.Format("[TryUnloadPlayerData] Player{0}\"{1}\", \"{2}\".", SuccessMsgUnloaded, pluginName, playerId));
          return true;
       }
-
+      
       public static bool TryUnloadPlayerData(ulong playerId)
       {
          if (stopped || !IsLoadedPlayerData(playerId))
             return false;
 
-         TrySavePlayerData(playerId);
+         
+         return true;
+      }
+
+      public static bool TryUnloadPlayersData<T>(string pluginName) where T : BaseData
+      {
+         if (stopped || _playersData.Count == 0 || !_playersData[0].ContainsKey(pluginName))
+            return false;
+
+         TrySavePlayersData<T>(pluginName);
 
          if (debug)
-            SendLog(LogType.Info, string.Format("[TryUnloadPlayerData] Player{0}\"{1}\".", SuccessMsgUnloaded, playerId));
-         _playersData.Remove(playerId);
+            SendLog(LogType.Info, string.Format("[TryUnloadPlayersData] Players{0}\"{1}\".", SuccessMsgUnloaded, pluginName));
+         
+         for (int i = 0; i < _playersData.Count; i++)
+         {
+            if (i >= _playersData.Count)
+               break;
+
+            _playersData.ElementAt(i).Value.Remove(pluginName);
+         }
          return true;
       }
 
@@ -351,17 +437,13 @@ namespace Oxide.Ext.Data
             SendLog(LogType.Info, string.Format("[TryUnloadPluginData] Plugin{0}\"{1}\", \"{2}\".", SuccessMsgUnloaded, dataName, pluginName));
          return true;
       }
-
+      
       public static bool TryUnloadPluginData(string pluginName)
       {
          if (stopped || !IsLoadedPluginData(pluginName))
             return false;
 
-         TrySavePluginData(pluginName);
-
-         if (debug)
-            SendLog(LogType.Info, string.Format("[TryUnloadPluginData] Plugin{0}\"{1}\".", SuccessMsgUnloaded, pluginName));
-         _pluginsData.Remove(pluginName);
+         
          return true;
       }
 
@@ -369,17 +451,22 @@ namespace Oxide.Ext.Data
 
       #region Backup
 
-      private static void BackupData<T>(string path, T data)
+      public static void BackupData<T>(string path, T data) where T : BaseData
       {
-         SendLog(LogType.Warning, string.Format("{0}\"{1}\", coz the datafile is outdated. Created new datafile.", WarningMsgBackupCreated, path));
-         Interface.Oxide.DataFileSystem.WriteObject($"{BackupDataFolder}{path}", data);
+         _savingQueue.Enqueue(new SaveData { Path = $"{BackupDataFolder}{path}", Data = data });
+         ExtDataCore.Instance.EnableSaving();
+      }
+      
+      public static void BackupDataOnSite<T>(string url, T data) where T : BaseData
+      {
+         
       }
 
       #endregion
 
       #region Checks
 
-      private static bool IsLoadedPlayerData(ulong playerId)
+      public static bool IsLoadedPlayerData(ulong playerId)
       {
          if (!_playersData.ContainsKey(playerId))
          {
@@ -391,7 +478,7 @@ namespace Oxide.Ext.Data
          return true;
       }
 
-      private static bool IsLoadedPlayerData(string pluginName, ulong playerId)
+      public static bool IsLoadedPlayerData(string pluginName, ulong playerId)
       {
          if (!IsLoadedPlayerData(playerId))
             return false;
@@ -406,7 +493,7 @@ namespace Oxide.Ext.Data
          return true;
       }
 
-      private static bool IsLoadedPluginData(string pluginName)
+      public static bool IsLoadedPluginData(string pluginName)
       {
          if (!_pluginsData.ContainsKey(pluginName))
          {
@@ -418,7 +505,7 @@ namespace Oxide.Ext.Data
          return true;
       }
 
-      private static bool IsLoadedPluginData(string pluginName, string dataName)
+      public static bool IsLoadedPluginData(string pluginName, string dataName)
       {
          if (!IsLoadedPluginData(pluginName))
             return false;

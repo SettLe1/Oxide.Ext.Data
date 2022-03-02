@@ -7,11 +7,13 @@
       <e p="Oxide.Ext.Data" t="IncludeRecursive">
         <e p="BaseData.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="DataConfig.cs" t="Include" />
-        <e p="DataExtension.cs" t="Include" />
+        <e p="Core" t="Include">
+          <e p="DataConfig.cs" t="Include" />
+          <e p="DataExtension.cs" t="Include" />
+          <e p="ExtDataCore.cs" t="Include" />
+          <e p="ExtDataPluginLoader.cs" t="Include" />
+        </e>
         <e p="DataManager.cs" t="Include" />
-        <e p="ExtDataAutoUpdater.cs" t="Include" />
-        <e p="ExtDataPluginLoader.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="Oxide.Ext.Data.csproj" t="IncludeRecursive" />
         <e p="Properties" t="Include">

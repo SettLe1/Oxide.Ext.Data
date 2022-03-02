@@ -4,47 +4,128 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Oxide.Core;
-using Oxide.Core.Plugins;
+using Oxide.Plugins;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Oxide.Ext.Data
+namespace Oxide.Ext.Data.Core
 {
-   internal class ExtDataAutoUpdater : CSPlugin
+   public class ExtDataCore : RustPlugin
    {
       private const string GITHUB_API = @"https://api.github.com/repos/SettLe1/Oxide.Ext.Data/releases/latest",
          DLL_URI = @"https://github.com/SettLe1/Oxide.Ext.Data/raw/master/Oxide.Ext.Data.dll";
 
-      internal static ExtDataAutoUpdaterComponent updater;
+      internal static ExtDataCore Instance;
+      internal static ExtDataCoreComponent Core;
 
-      public ExtDataAutoUpdater()
+      public ExtDataCore()
       {
          Author = "SettLe";
-         Name = "ExtDataAutoUpdater";
-         Title = "ExtDataAutoUpdater";
+         Name = "ExtDataCore";
+         Title = "ExtDataCore";
          Version = DataExtension.CurrentVersion;
          
-         if (updater != null)
-            updater.Cancel();
-         else if (DataExtension.Config.AutoUpdateExtension)
+         if (Core != null)
+            Core.Remove();
+
+         Instance = this;
+         
+         Core = new GameObject().AddComponent<ExtDataCoreComponent>();
+         
+         if (DataExtension.Config.AutoUpdateExtension)
          {
-            DataManager.stopped = true;
-            updater = new GameObject().AddComponent<ExtDataAutoUpdaterComponent>();
+            Core.CheckAndDownloadLatestVersion();
          }
       }
-
-      internal class ExtDataAutoUpdaterComponent : FacepunchBehaviour
+      
+      private void Loaded()
       {
-         private void Awake()
+         Unsubscribe(nameof(OnFrame));
+      }
+      
+      // private void OnServerInitialized(bool initial)
+      // {
+      //    
+      // }
+      
+      private void Unload()
+      {
+         DataManager.stopped = true;
+         Core.Remove();
+         Instance = null;
+      }
+      
+      // private void OnNewSave(string filename)
+      // {
+      //    
+      // }
+      
+      private void OnServerSave()
+      {
+         DataManager.TrySaveAllData();
+      }
+      
+      // private void OnPlayerConnected(BasePlayer player)
+      // {
+      //    DataManager.TryLoadPlayerData(player.userID);
+      // }
+      
+      // private void OnPlayerDisconnected(BasePlayer player, string reason)
+      // {
+      //    DataManager.TryUnloadPlayerData(player.userID);
+      // }
+      
+      // private void OnPluginLoaded(Plugin name)
+      // {
+      //    
+      // }
+      
+      // private void OnPluginUnloaded(Plugin name)
+      // {
+      //    
+      // }
+
+      internal void EnableSaving()
+      {
+         Subscribe(nameof(OnFrame));
+         // try
+         // {
+         //    Subscribe(nameof(OnFrame));
+         // }
+         // catch (Exception)
+         // {
+         // }
+      }
+      
+      private void OnFrame()
+      {
+         if (DataManager.stopped)
+            return;
+            
+         if (DataManager._savingQueue.Count != 0)
          {
-            StartCoroutine(CheckAndDownloadLatestVersionCor());
+            var save = DataManager._savingQueue.Dequeue();
+            Interface.Oxide.DataFileSystem.WriteObject(save.Path, save.Data);
+            return;
          }
 
-         internal void Cancel()
+         if (DataManager.savingAllPlayersData)
+            DataManager.savingAllPlayersData = false;
+            
+         if (DataManager.savingAllPluginsData)
+            DataManager.savingAllPluginsData = false;
+         
+         Unsubscribe(nameof(OnFrame));
+      }
+
+      internal class ExtDataCoreComponent : FacepunchBehaviour
+      {
+         internal void Remove()
          {
+            StopAllCoroutines();
             DestroyImmediate(this);
          }
-         
+
          private void Error(string msg)
          {
             DataManager.SendLog(LogType.Error, msg);
@@ -57,6 +138,12 @@ namespace Oxide.Ext.Data
             DataManager.SendLog(LogType.Info, msg);
             DataManager.stopped = false;
             Destroy(this);
+         }
+         
+         internal void CheckAndDownloadLatestVersion()
+         {
+            DataManager.stopped = true;
+            StartCoroutine(CheckAndDownloadLatestVersionCor());
          }
          
          private IEnumerator CheckAndDownloadLatestVersionCor()

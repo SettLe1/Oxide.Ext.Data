@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Oxide.Core;
 using Oxide.Core.Configuration;
 
-namespace Oxide.Ext.Data
+namespace Oxide.Ext.Data.Core
 {
    public class DataConfig : ConfigFile
    {

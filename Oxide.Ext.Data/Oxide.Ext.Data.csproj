@@ -88,12 +88,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ExtDataAutoUpdater.cs" />
         <Compile Include="BaseData.cs" />
-        <Compile Include="DataConfig.cs" />
-        <Compile Include="DataExtension.cs" />
+        <Compile Include="Core\DataConfig.cs" />
+        <Compile Include="Core\DataExtension.cs" />
+        <Compile Include="Core\ExtDataCore.cs" />
+        <Compile Include="Core\ExtDataPluginLoader.cs" />
         <Compile Include="DataManager.cs" />
-        <Compile Include="ExtDataPluginLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

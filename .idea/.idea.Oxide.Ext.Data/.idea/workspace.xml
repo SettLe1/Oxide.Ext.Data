@@ -10,8 +10,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9344c9f-948b-4676-9d26-0eab77c9370c" name="Default Changelist" comment="">
+    <list default="true" id="c9344c9f-948b-4676-9d26-0eab77c9370c" name="Default Changelist" comment="v1.0.5">
+      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Core/DataConfig.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Core/DataExtension.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataCore.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataPluginLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Oxide.Ext.Data/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/DataConfig.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataAutoUpdater.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataPluginLoader.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Oxide.Ext.Data/Oxide.Ext.Data.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Oxide.Ext.Data/Oxide.Ext.Data.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,15 +35,20 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/DataConfig.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/62/1875f256/Extension.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/ExtDataPluginLoader.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/ExtDataAutoUpdater.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/48827A05-C015-4B4B-ADA3-2EAF5C10D8B0/20/e09c767a/IDictionary`2.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/01/32484081/Library.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/8c/1a794043/PluginManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/96/96218dd4/Plugin.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/Core/DataConfig.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/Core/DataExtension.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataCore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataPluginLoader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/Properties/AssemblyInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/66/b10dbb2f/Timer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/c1/31864297/OxideMod.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Oxide.Ext.Data/BaseData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/40/a3d39e6f/Interface.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9882F28D-C220-4B4D-BA51-4A9AD18F5042/a2/7d85d201/CSPlugin.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -42,10 +59,15 @@
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataConfig.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/BaseData.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/AutoUpdate.cs" />
-        <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataPluginLoader.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/ExtDataAutoUpdater.cs" />
         <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataExtension.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/Core/DataConfig.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataAutoUpdater.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/DataManager.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataPluginLoader.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/Core/ExtDataCore.cs" />
+        <option value="$PROJECT_DIR$/Oxide.Ext.Data/Core/DataExtension.cs" />
       </list>
     </option>
   </component>
@@ -97,21 +119,26 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="v1.0.0" />
     <MESSAGE value="v1.0.4" />
-    <option name="LAST_COMMIT_MESSAGE" value="v1.0.4" />
+    <MESSAGE value="v1.0.5" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.0.5" />
   </component>
   <component name="WindowStateProjectService">
     <state x="208" y="382" width="888" height="548" key="#Notifications" timestamp="1645982394667">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="208" y="382" width="888" height="548" key="#Notifications/0.0.1920.1040@0.0.1920.1040" timestamp="1645982394667" />
+    <state x="820" y="441" key="Github.Dialog.Accounts.Choose" timestamp="1646047196411">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="820" y="441" key="Github.Dialog.Accounts.Choose/0.0.1920.1040@0.0.1920.1040" timestamp="1646047196411" />
     <state x="827" y="417" key="Github.ShareDialog" timestamp="1645826163839">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="827" y="417" key="Github.ShareDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1645826163839" />
-    <state x="552" y="239" key="Vcs.Push.Dialog.v2" timestamp="1645826112883">
+    <state x="552" y="239" key="Vcs.Push.Dialog.v2" timestamp="1646047440700">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="239" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1645826112883" />
+    <state x="552" y="239" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1646047440700" />
     <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1645826083996">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

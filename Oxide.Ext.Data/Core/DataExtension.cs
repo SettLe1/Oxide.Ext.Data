@@ -2,14 +2,15 @@
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 
-namespace Oxide.Ext.Data
+namespace Oxide.Ext.Data.Core
 {
    public class DataExtension : Extension
    {
       public override string Name => "Data";
       public override string Author => "SettLe";
       public override VersionNumber Version => CurrentVersion;
-      internal static readonly VersionNumber CurrentVersion = new VersionNumber(1, 0, 4);
+      public override bool SupportsReloading => true;
+      internal static readonly VersionNumber CurrentVersion = new VersionNumber(1, 0, 6);
       
       internal static DataConfig Config;
 
@@ -22,7 +23,6 @@ namespace Oxide.Ext.Data
          Config = ConfigFile.Load<DataConfig>($"{Interface.Oxide.ConfigDirectory}/Ext.Data.json");
          DataManager.checkVersion = Config.CheckPluginVersions;
          Manager.RegisterPluginLoader(new ExtDataPluginLoader());
-         DataManager.ToggleDebug();
       }
 
       public override void Unload()
@@ -33,8 +33,6 @@ namespace Oxide.Ext.Data
       public override void OnShutdown()
       {
          DataManager.stopped = true;
-         if (ExtDataAutoUpdater.updater != null)
-            ExtDataAutoUpdater.updater.Cancel();
       }
    }
 }
